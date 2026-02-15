@@ -1,41 +1,65 @@
-<!-- thanks.html -->
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SkySpot Beta — You’re In</title>
-  <style>
-    :root { --bg:#0b1220; --card:#111a2e; --text:#eaf0ff; --muted:#aab6d6; --accent:#6ee7ff; }
-    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial; background:var(--bg); color:var(--text); }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 48px 20px; }
-    .card { background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:18px; padding:18px; box-shadow:0 14px 30px rgba(0,0,0,.25); }
-    h1 { margin:0 0 10px; font-size: 34px; }
-    p { margin:0 0 12px; color:var(--muted); line-height:1.5; }
-    .btn { display:block; padding:12px 14px; border-radius:12px; background:var(--accent); color:#04101a; font-weight:800; text-decoration:none; text-align:center; margin: 10px 0; }
-    a { color:var(--accent); text-decoration:none; }
-    .small { font-size:12px; color:var(--muted); }
-  </style>
+
+<style>
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Inter",sans-serif;
+background:#0B1220;
+color:#EAF0FF;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.card{
+background:#111A2E;
+padding:40px;
+border-radius:16px;
+text-align:center;
+width:400px;
+}
+
+.logo{
+width:80px;
+margin-bottom:20px;
+}
+
+.button{
+display:block;
+margin-top:20px;
+padding:16px;
+background:linear-gradient(135deg,#38B8C4,#2397A5);
+color:white;
+border-radius:12px;
+text-decoration:none;
+font-weight:600;
+}
+
+</style>
+
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>You’re in ✈️</h1>
-      <p>Thanks for joining the SkySpot beta. Install the app and you’re ready to test.</p>
 
-      <!-- Replace the link below with your public TestFlight join link (when enabled) -->
-      <a class="btn" href="https://testflight.apple.com/join/kj3hCPzn" target="_blank" rel="noreferrer">Install SkySpot via TestFlight</a>
+<div class="card">
 
-      <!-- Optional links -->
-      <a class="btn" href="" target="https://www.notion.so/SkySpot-Beta-Stress-Free-Airport-Travel-303782b2a4b8807697ecff128ae1e3bb?source=copy_link" rel="noreferrer">Open Beta Guide</a>
-      <a class="btn" href="https://forms.gle/UdqAn8uCUemxyMgf8" target="_blank" rel="noreferrer">Submit Feedback</a>
+<img src="SkySpot Logo.png" class="logo">
 
-      <p class="small">If the install link doesn’t work, you may need to update iOS or install TestFlight first.</p>
-    </div>
+<h2>You're in.</h2>
 
-    <p class="small" style="margin-top:16px;">
-      Back to <a href="/">SkySpot landing page</a>
-    </p>
-  </div>
+<p>
+Install SkySpot via TestFlight.
+</p>
+
+<a href="https://testflight.apple.com/join/kj3hCPzn" class="button">
+Install SkySpot
+</a>
+
+</div>
+
 </body>
 </html>

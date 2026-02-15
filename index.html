@@ -1,76 +1,105 @@
-<!-- index.html -->
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SkySpot Beta</title>
-  <style>
-    :root { --bg:#0b1220; --card:#111a2e; --text:#eaf0ff; --muted:#aab6d6; --accent:#6ee7ff; }
-    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial; background:var(--bg); color:var(--text); }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 48px 20px; }
-    .nav { display:flex; justify-content:space-between; align-items:center; margin-bottom: 40px; }
-    .logo { font-weight:800; letter-spacing:.3px; display:flex; align-items:center; gap:10px; }
-    .pill { padding:8px 12px; border:1px solid rgba(110,231,255,.35); border-radius:999px; color:var(--accent); font-size:12px; }
-    h1 { font-size: 44px; line-height:1.05; margin:0 0 12px; }
-    p { margin:0 0 14px; color:var(--muted); font-size:16px; line-height:1.5; }
-    .grid { display:grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
-    @media (max-width:860px){ .grid { grid-template-columns:1fr; } h1{font-size:36px;} }
-    .card { background:var(--card); border:1px solid rgba(255,255,255,.06); border-radius:18px; padding:18px; box-shadow:0 14px 30px rgba(0,0,0,.25); }
-    .steps { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:18px; }
-    @media (max-width:860px){ .steps{grid-template-columns:1fr;} }
-    .step { padding:14px; border-radius:14px; border:1px solid rgba(255,255,255,.06); }
-    .step strong { display:block; margin-bottom:6px; }
-    .btn { display:inline-block; padding:12px 14px; border-radius:12px; background:var(--accent); color:#04101a; font-weight:800; text-decoration:none; text-align:center; }
-    .small { font-size:12px; color:var(--muted); }
-    a { color:var(--accent); text-decoration:none; }
-  </style>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>SkySpot — Predict your airport journey.</title>
+
+<style>
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display",sans-serif;
+background:#0B1220;
+color:#EAF0FF;
+}
+
+.hero{
+height:100vh;
+background:linear-gradient(135deg,#38B8C4,#2397A5);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+text-align:center;
+}
+
+.logo{
+width:120px;
+margin-bottom:30px;
+}
+
+h1{
+font-size:52px;
+margin:0;
+font-weight:600;
+}
+
+.sub{
+margin-top:16px;
+color:#D6F3F7;
+font-size:20px;
+max-width:500px;
+}
+
+.cta{
+margin-top:30px;
+background:#0B1220;
+color:#EAF0FF;
+padding:16px 28px;
+border-radius:12px;
+text-decoration:none;
+font-weight:600;
+}
+
+.section{
+padding:80px 24px;
+max-width:1000px;
+margin:auto;
+}
+
+.card{
+background:#111A2E;
+padding:32px;
+border-radius:16px;
+margin-top:20px;
+}
+
+</style>
+
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="nav">
-      <div class="logo">SkySpot <span class="pill">Beta Live</span></div>
-      <div class="small">ATL • LAX • JFK • ORD • DFW</div>
-    </div>
 
-    <div class="grid">
-      <div>
-        <h1>Know exactly when to leave for the airport.</h1>
-        <p>SkySpot predicts your trip from <strong>home → gate</strong> and gives one clear leave-by recommendation—so you stop guessing.</p>
-        <p class="small">Currently testing across the 5 busiest U.S. airports.</p>
+<div class="hero">
 
-        <div class="steps">
-          <div class="step card">
-            <strong>1) Pick your airport</strong>
-            <div class="small">ATL, LAX, JFK, ORD, DFW.</div>
-          </div>
-          <div class="step card">
-            <strong>2) Get a leave-by time</strong>
-            <div class="small">Time + cost + risk indicators.</div>
-          </div>
-          <div class="step card">
-            <strong>3) Tap to go</strong>
-            <div class="small">Handoff to Maps, Uber, or Lyft.</div>
-          </div>
-        </div>
-      </div>
+<img src="SkySpot Logo.png" class="logo">
 
-      <div class="card">
-        <h2 style="margin:0 0 10px;">Get Beta Access</h2>
-        <p class="small">Join the beta and we’ll send install instructions immediately.</p>
+<h1>
+Know exactly when to leave.
+</h1>
 
-        <!-- Replace with your Tally form link -->
-        <a class="btn" href="https://forms.gle/WgoZPyrrMW9uZBfk7" target="_blank" rel="noreferrer">Join the Beta!</a>
+<div class="sub">
+SkySpot predicts your journey from home to gate and delivers one precise leave-time recommendation.
+</div>
 
-        <p class="small" style="margin-top:12px;">
-          After you join, you’ll be redirected to install SkySpot via TestFlight.
-        </p>
-      </div>
-    </div>
+<a href="https://forms.gle/Jha2U3RgYdsVBiGt5" class="cta">
+Join Beta
+</a>
 
-    <div class="small" style="margin-top:40px;">
-      Questions? Email: <a href="skyspotinfo@gmail.com">YOUR_EMAIL</a>
-    </div>
-  </div>
+</div>
+
+<div class="section">
+
+<div class="card">
+
+SkySpot is currently in beta across ATL, LAX, JFK, ORD, and DFW.
+
+</div>
+
+</div>
+
 </body>
 </html>
