@@ -95,6 +95,8 @@
       box-shadow: 0 24px 70px rgba(0,0,0,.30);
     }
 
+   #demo{ scroll-margin-top: 24px; }
+
     .demoHeader{
       display:flex;
       justify-content:space-between;
@@ -168,17 +170,17 @@
       <a href="#demo" class="secondary">Watch Demo</a>
     </div>
 
-    <div id="demo" class="demoCard">
-      <div class="demoHeader">
-        <span class="demoPill">Product Demo</span>
-        <span class="demoNote">20s • muted • loop</span>
-      </div>
+    <div id="demo" class="demo-card">
+  <div class="demo-header">
+    <span class="demo-pill">Product Demo</span>
+    <span class="demo-note">Tap play if it doesn’t autoplay</span>
+  </div>
 
-      <!-- Put skyspot-demo.mp4 in the repo root -->
-      <video autoplay muted loop playsinline>
-        <source src="./skyspot-video.mp4" type="video/mp4">
-      </video>
-    </div>
+  <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
+    <source src="skyspot-video.mp4" type="video/mp4">
+  </video>
+</div>
+
   </div>
 
   <div class="section">
