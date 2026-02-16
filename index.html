@@ -87,19 +87,15 @@
    
     /* Demo */
   .demo-card{
-  width: 320px;              /* iPhone width */
-  max-width: 88vw;           /* responsive on small screens */
-  margin: 26px auto 0;
-  background: rgba(11,18,32,0.72);
-  border: 1px solid rgba(255,255,255,0.16);
-  border-radius: 22px;
-  padding: 12px;
-  box-shadow: 0 24px 70px rgba(0,0,0,.28);
-  backdrop-filter: blur(10px);
+  width: 280px;              /* exact phone width */
+  margin: 32px auto 0;
+  background: rgba(11,18,32,0.82);
+  border-radius: 26px;
+  padding: 10px;
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.05),
+    0 30px 80px rgba(0,0,0,.55);
 }
-
-
-
 
  #demo{ scroll-margin-top: 24px; }
 
@@ -142,10 +138,10 @@
 .demo-video{
   width: 100%;
   height: auto;
+  border-radius: 20px;
   display: block;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.12);
 }
+
 
 
 
@@ -207,9 +203,10 @@
   </div>
 </div>
 
-  <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
-    <source src="skyspot-video.mp4" type="video/mp4">
-  </video>
+ <video class="demo-video" autoplay muted loop playsinline controls preload="metadata" width="280">
+  <source src="skyspot-video.mp4" type="video/mp4">
+</video>
+
 </div>
 
 
