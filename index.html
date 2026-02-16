@@ -1,105 +1,191 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SkySpot — Predict your airport journey.</title>
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display",sans-serif;
+      background:#0B1220;
+      color:#EAF0FF;
+    }
 
-<title>SkySpot — Predict your airport journey.</title>
+    .hero{
+      min-height:100vh;
+      background:linear-gradient(135deg,#38B8C4,#2397A5);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      text-align:center;
+      padding: 72px 18px 56px;
+      box-sizing:border-box;
+    }
 
-<style>
+    .logo{
+      width:120px;
+      margin-bottom:22px;
+    }
 
-body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display",sans-serif;
-background:#0B1220;
-color:#EAF0FF;
-}
+    h1{
+      font-size:52px;
+      margin:0;
+      font-weight:650;
+      letter-spacing:-0.02em;
+      line-height:1.05;
+    }
 
-.hero{
-height:100vh;
-background:linear-gradient(135deg,#38B8C4,#2397A5);
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-text-align:center;
-}
+    .sub{
+      margin-top:16px;
+      color:#D6F3F7;
+      font-size:20px;
+      max-width:640px;
+      line-height:1.5;
+    }
 
-.logo{
-width:120px;
-margin-bottom:30px;
-}
+    .trust{
+      margin-top:14px;
+      font-size:13px;
+      color: rgba(234,240,255,0.85);
+      opacity: 0.95;
+    }
 
-h1{
-font-size:52px;
-margin:0;
-font-weight:600;
-}
+    .ctaRow{
+      display:flex;
+      gap:14px;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:26px;
+    }
 
-.sub{
-margin-top:16px;
-color:#D6F3F7;
-font-size:20px;
-max-width:500px;
-}
+    .cta{
+      background:#0B1220;
+      color:#EAF0FF;
+      padding:16px 28px;
+      border-radius:12px;
+      text-decoration:none;
+      font-weight:650;
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+    }
 
-.cta{
-margin-top:30px;
-background:#0B1220;
-color:#EAF0FF;
-padding:16px 28px;
-border-radius:12px;
-text-decoration:none;
-font-weight:600;
-}
+    .secondary{
+      color:#0B1220;
+      text-decoration:none;
+      font-weight:700;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.20);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(6px);
+    }
 
-.section{
-padding:80px 24px;
-max-width:1000px;
-margin:auto;
-}
+    /* Demo */
+    .demoCard{
+      width: min(520px, 100%);
+      margin-top: 26px;
+      background: rgba(11,18,32,0.72);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 24px 70px rgba(0,0,0,.30);
+    }
 
-.card{
-background:#111A2E;
-padding:32px;
-border-radius:16px;
-margin-top:20px;
-}
+    .demoHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:10px;
+      gap:10px;
+    }
 
-</style>
+    .demoPill{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      color:#D6F3F7;
+      border: 1px solid rgba(214,243,247,0.35);
+      background: rgba(11,18,32,0.35);
+    }
 
+    .demoNote{
+      font-size:12px;
+      color: rgba(234,240,255,0.85);
+      opacity: 0.9;
+    }
+
+    video{
+      width:100%;
+      border-radius:14px;
+      display:block;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.12);
+    }
+
+    .section{
+      padding:70px 24px;
+      max-width:1000px;
+      margin:auto;
+    }
+
+    .card{
+      background:#111A2E;
+      padding:32px;
+      border-radius:16px;
+      margin-top:20px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    @media (max-width: 640px){
+      h1{ font-size:40px; }
+      .sub{ font-size:16px; }
+      .logo{ width:108px; }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="hero">
+  <div class="hero">
+    <img src="./skyspot-logo.png" alt="SkySpot logo" class="logo">
 
-<img src="./skyspot-logo.png" alt="SkySpot logo" class="logo">
+    <h1>Know exactly when to leave for the airport.</h1>
 
-<h1>
-Know exactly when to leave.
-</h1>
+    <div class="sub">
+      SkySpot predicts your journey from <strong>home → gate</strong> and delivers one precise leave-time recommendation.
+    </div>
 
-<div class="sub">
-SkySpot predicts your journey from home to gate and delivers one precise leave-time recommendation.
-</div>
+    <div class="trust">
+      Now in beta across <strong>ATL • LAX • JFK • ORD • DFW</strong>
+    </div>
 
-<a href="https://forms.gle/Jha2U3RgYdsVBiGt5" class="cta">
-Join Beta
-</a>
+    <div class="ctaRow">
+      <a href="https://forms.gle/Jha2U3RgYdsVBiGt5" class="cta">Join Beta</a>
+      <a href="#demo" class="secondary">Watch Demo</a>
+    </div>
 
-</div>
+    <div id="demo" class="demoCard">
+      <div class="demoHeader">
+        <span class="demoPill">Product Demo</span>
+        <span class="demoNote">20s • muted • loop</span>
+      </div>
 
-<div class="section">
+      <!-- Put skyspot-demo.mp4 in the repo root -->
+      <video autoplay muted loop playsinline>
+        <source src="./skyspot-demo.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
 
-<div class="card">
-
-SkySpot is currently in beta across ATL, LAX, JFK, ORD, and DFW.
-
-</div>
-
-</div>
+  <div class="section">
+    <div class="card">
+      SkySpot is currently in beta across ATL, LAX, JFK, ORD, and DFW.
+    </div>
+  </div>
 
 </body>
 </html>
