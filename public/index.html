@@ -168,7 +168,59 @@
   </style>
 </head>
 
-<!-- SkySpot Stress Line Chat Widget -->
+<body>
+
+  <div class="hero">
+    <img src="./skyspot-logo.png" alt="SkySpot logo" class="logo">
+
+    <h1>Know exactly when to leave for the airport.</h1>
+
+    <div class="sub">
+      SkySpot predicts your journey from <strong>home → gate</strong> and delivers one precise leave-time recommendation.
+    </div>
+
+    <div class="trust">
+      Now in beta across <strong>ATL • LAX • JFK • ORD • DFW • BWI • DCA</strong>
+    </div>
+
+    <div class="ctaRow">
+      <a href="https://forms.gle/Jha2U3RgYdsVBiGt5" class="cta">Join Beta</a>
+      <a href="#demo" class="secondary">Watch Demo</a>
+    </div>
+
+
+<div id="demo" class="demo-card">
+  <div class="demo-top">
+    <span class="demo-pill">Product Demo</span>
+    <span class="demo-note">Tap play if it doesn’t autoplay</span>
+  </div>
+
+  <div class="demo-cred">
+    Early beta users are testing SkySpot on real airport trips.
+  </div>
+
+  <div class="demo-example">
+    Example: Flight at 8:15 AM → SkySpot recommends leaving at 6:42 AM
+  </div>
+
+  <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
+  <source src="skyspot-video.mp4" type="video/mp4">
+</video>
+</div>
+
+
+</div>
+
+
+  </div>
+
+  <div class="section">
+    <div class="card">
+      SkySpot is currently in beta across ATL, LAX, JFK, ORD, DFW, DCA and BWI.
+    </div>
+  </div>
+
+  <!-- SkySpot Stress Line Chat Widget -->
 <style>
   .ss-chat-launch {
     position: fixed; right: 18px; bottom: 18px;
@@ -358,7 +410,7 @@
 }
 
   launch.addEventListener("click", async () => {
-    chat.style.display = "block";
+    chat.style.display = "flex";
     if (messages.length === 0) {
       const welcome = "Tell me which airport you were flying from (ex: ATL, JFK, LAX).";
       messages.push({ role: "assistant", content: welcome });
@@ -372,57 +424,6 @@
   input.addEventListener("keydown", (e) => { if(e.key === "Enter") send(); });
 </script>
 
-<body>
-
-  <div class="hero">
-    <img src="./skyspot-logo.png" alt="SkySpot logo" class="logo">
-
-    <h1>Know exactly when to leave for the airport.</h1>
-
-    <div class="sub">
-      SkySpot predicts your journey from <strong>home → gate</strong> and delivers one precise leave-time recommendation.
-    </div>
-
-    <div class="trust">
-      Now in beta across <strong>ATL • LAX • JFK • ORD • DFW • BWI • DCA</strong>
-    </div>
-
-    <div class="ctaRow">
-      <a href="https://forms.gle/Jha2U3RgYdsVBiGt5" class="cta">Join Beta</a>
-      <a href="#demo" class="secondary">Watch Demo</a>
-    </div>
-
-
-<div id="demo" class="demo-card">
-  <div class="demo-top">
-    <span class="demo-pill">Product Demo</span>
-    <span class="demo-note">Tap play if it doesn’t autoplay</span>
-  </div>
-
-  <div class="demo-cred">
-    Early beta users are testing SkySpot on real airport trips.
-  </div>
-
-  <div class="demo-example">
-    Example: Flight at 8:15 AM → SkySpot recommends leaving at 6:42 AM
-  </div>
-
-  <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
-  <source src="skyspot-video.mp4" type="video/mp4">
-</video>
-</div>
-
-
-</div>
-
-
-  </div>
-
-  <div class="section">
-    <div class="card">
-      SkySpot is currently in beta across ATL, LAX, JFK, ORD, DFW, DCA and BWI.
-    </div>
-  </div>
 
 </body>
 </html>

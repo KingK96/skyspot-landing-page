@@ -45,11 +45,15 @@ Rules:
 `;
 
 // More reliable than just checking { } at ends
-function tryParseJson(text) {
+function extractJsonObject(text) {
   const t = (text || "").trim();
-  if (!t.startsWith("{") || !t.endsWith("}")) return null;
+  const start = t.indexOf("{");
+  const end = t.lastIndexOf("}");
+  if (start === -1 || end === -1 || end <= start) return null;
+
+  const candidate = t.slice(start, end + 1);
   try {
-    return JSON.parse(t);
+    return JSON.parse(candidate);
   } catch {
     return null;
   }
@@ -74,7 +78,7 @@ app.post("/api/stress", async (req, res) => {
     });
 
     const text = resp.output_text || "";
-    const parsed = tryParseJson(text);
+    const parsed = extractJsonObject(text);
 
     // If it's NOT final JSON, just return the next question/message
     if (!parsed) {
