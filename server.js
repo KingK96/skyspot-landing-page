@@ -7,7 +7,7 @@ app.use(express.json({ limit: "1mb" }));
 app.use(express.static("public"));
 
 // --- Sanity checks (helps you debug fast in Render logs) ---
-const REQUIRED_ENVS = ["OPENAI_API_KEY", "AIRTABLE_API_KEY", "AIRTABLE_BASE_ID"];
+const REQUIRED_ENVS = ["OPENAI_API_KEY", "AIRTABLE_API_KEY", "AIRTABLE_BASE_ID", "AIRTABLE_TABLE_NAME"];
 for (const k of REQUIRED_ENVS) {
   if (!process.env[k]) console.warn(`[WARN] Missing env var: ${k}`);
 }
@@ -41,7 +41,7 @@ Return ONLY valid JSON when complete (no extra words):
   "minutes_early_left_home": number|null,
   "story": string,
   "sentiment": "Calm"|"Annoyed"|"Stressed"|"Angry"|"Anxious",
-  "followup_opt_in": boolean,
+  "follow_up_opt_in": boolean,
   "contact": string|null
 }
 `;
@@ -100,7 +100,7 @@ app.post("/api/stress", async (req, res) => {
           : null,
       Story: parsed.story ?? "",
       Sentiment: parsed.sentiment ?? "",
-      "Follow Up Opt In": !!parsed.followup_opt_in,
+      "Follow Up Opt In": !!parsed.follow_up_opt_in,
       Contact: parsed.contact ?? "",
       "Raw JSON": JSON.stringify(parsed),
       Source: source || "landing_page",
