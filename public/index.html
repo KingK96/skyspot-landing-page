@@ -181,32 +181,39 @@
     cursor: pointer;
     z-index: 9999;
   }
-  .ss-chat {
-    position: fixed; right: 18px; bottom: 72px;
-    width: min(380px, calc(100vw - 36px));
-    height: 520px;
-    background: #111A2E;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 16px;
-    box-shadow: 0 24px 80px rgba(0,0,0,.55);
-    overflow: hidden;
-    display: none;
-    z-index: 9999;
-  }
+  .ss-chat{
+  position: fixed;
+  right: 18px;
+  bottom: 72px;
+  width: min(380px, calc(100vw - 36px));
+  height: min(70vh, 560px);     /* responsive */
+  background: #111A2E;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.55);
+  overflow: hidden;
+  display: none;
+  z-index: 9999;
+
+  /* NEW */
+  display: none;
+  flex-direction: column;
+}
   .ss-chat-header{
     background: rgba(11,18,32,0.92);
     padding: 14px 14px;
     display:flex; align-items:center; justify-content:space-between;
     border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding-top: calc(14px + env(safe-area-inset-top));
   }
   .ss-chat-title{ font-weight: 800; }
   .ss-chat-sub{ font-size: 12px; opacity: 0.8; margin-top: 3px; }
   .ss-chat-close{ cursor:pointer; opacity:.85; font-weight:800; }
   .ss-chat-body{
-    height: 390px;
-    padding: 14px;
-    overflow:auto;
-  }
+  flex: 1 1 auto;       /* NEW */
+  overflow: auto;
+  padding: 14px;
+}
   .ss-msg{ margin: 10px 0; display:flex; }
   .ss-msg.bot { justify-content:flex-start; }
   .ss-msg.user { justify-content:flex-end; }
@@ -225,6 +232,8 @@
     border-top: 1px solid rgba(255,255,255,0.08);
     display:flex; gap: 8px;
     background: rgba(11,18,32,0.6);
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    
   }
   .ss-input{
     flex:1;
@@ -296,46 +305,57 @@
   }
 
   async function callBot(){
-    const resp = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages })
-    });
-    const data = await resp.json();
-    return data.text;
+  const resp = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messages, source: "landing_page" })
+  });
+
+  // NEW: handle non-200
+  if (!resp.ok) {
+    const text = await resp.text().catch(() => "");
+    throw new Error(`API ${resp.status}: ${text}`);
   }
+
+  const data = await resp.json();
+  return data;
+}
 
   async function send(){
-    const text = input.value.trim();
-    if(!text) return;
-    input.value = "";
-    messages.push({ role: "user", content: text });
-    addMsg("user", text);
+  const text = input.value.trim();
+  if(!text) return;
 
-    addMsg("assistant", "…");
-    const last = body.lastChild;
+  input.value = "";
+  messages.push({ role: "user", content: text });
+  addMsg("user", text);
 
-    try{
-      const botText = await callBot();
+  addMsg("assistant", "…");
+  const last = body.lastChild;
 
-      // replace the "…" bubble
-      last.querySelector(".ss-bubble").textContent = botText;
+  try{
+    // NEW: callBot should now return an object: { text: "...", done: true/false }
+    const data = await callBot();
+    const botText = data.text || "";
 
-      messages.push({ role: "assistant", content: botText });
+    // replace the "…" bubble
+    last.querySelector(".ss-bubble").textContent = botText;
 
-      // If the bot returned JSON, redirect to your "thanks" page or show install CTA
-      if (botText.trim().startsWith("{") && botText.trim().endsWith("}")) {
-        // Optionally send JSON somewhere else here too.
-        setTimeout(() => {
-          window.location.href = "./thanks.html"; // you already have this :contentReference[oaicite:2]{index=2}
-        }, 800);
-      }
+    // keep conversation history
+    messages.push({ role: "assistant", content: botText });
 
-    } catch(e){
-      last.querySelector(".ss-bubble").textContent = "Something went wrong. Please try again.";
-      console.error(e);
+    // NEW: redirect when backend says it's done
+    if (data.done) {
+      setTimeout(() => {
+        window.location.href = "./thanks.html";
+      }, 600);
     }
+
+  } catch(e){
+    last.querySelector(".ss-bubble").textContent =
+      "Something went wrong. Please try again.";
+    console.error(e);
   }
+}
 
   launch.addEventListener("click", async () => {
     chat.style.display = "block";

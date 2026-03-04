@@ -6,14 +6,22 @@ const app = express();
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static("public"));
 
+// --- Sanity checks (helps you debug fast in Render logs) ---
+const REQUIRED_ENVS = ["OPENAI_API_KEY", "AIRTABLE_API_KEY", "AIRTABLE_BASE_ID"];
+for (const k of REQUIRED_ENVS) {
+  if (!process.env[k]) console.warn(`[WARN] Missing env var: ${k}`);
+}
+
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Airtable setup
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
-  .base(process.env.AIRTABLE_BASE_ID);
+const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
+  process.env.AIRTABLE_BASE_ID
+);
 
 const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME || "Submissions";
 
+// NOTE: These enum labels should match your Airtable Single Select options EXACTLY.
 const SYSTEM_PROMPT = `
 You are the SkySpot Airport Stress Line intake assistant.
 Ask ONE question at a time. Finish in <= 6 questions.
@@ -36,16 +44,28 @@ Rules:
 - Do not include markdown in the final JSON.
 `;
 
-function looksLikeJson(text) {
+// More reliable than just checking { } at ends
+function tryParseJson(text) {
   const t = (text || "").trim();
-  return t.startsWith("{") && t.endsWith("}");
+  if (!t.startsWith("{") || !t.endsWith("}")) return null;
+  try {
+    return JSON.parse(t);
+  } catch {
+    return null;
+  }
 }
+
+// Optional health check
+app.get("/health", (req, res) => res.json({ ok: true }));
 
 app.post("/api/stress", async (req, res) => {
   try {
     const { messages, source } = req.body || {};
     if (!Array.isArray(messages)) {
       return res.status(400).json({ error: "messages must be an array" });
+    }
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: "Missing OPENAI_API_KEY" });
     }
 
     const resp = await client.responses.create({
@@ -54,46 +74,47 @@ app.post("/api/stress", async (req, res) => {
     });
 
     const text = resp.output_text || "";
+    const parsed = tryParseJson(text);
 
-    // If the model returned final JSON, parse + save to Airtable
-    if (looksLikeJson(text)) {
-      let parsed;
-      try {
-        parsed = JSON.parse(text);
-      } catch (e) {
-        // If JSON is malformed, return as-is (don’t crash)
-        return res.json({ text });
-      }
-
-      // Airtable fields (match your table field names)
-      const fields = {
-  "Airport": parsed.airport ?? "",
-  "Outcome": parsed.outcome ?? "",
-  "Cause": parsed.cause ?? "",
-  "Minutes Early Left Home": 
-    typeof parsed.minutes_early_left_home === "number"
-      ? parsed.minutes_early_left_home
-      : null,
-  "Story": parsed.story ?? "",
-  "Sentiment": parsed.sentiment ?? "",
-  "Follow Up Opt In": !!parsed.followup_opt_in,
-  "Contact": parsed.contact ?? "",
-  "Raw JSON": JSON.stringify(parsed),
-  "Source": source || "landing_page",
-  "Created At": new Date().toISOString()
-};
-
-      // Save (best-effort: we still respond even if Airtable fails)
-      try {
-        await base(TABLE_NAME).create([{ fields }]);
-      } catch (airErr) {
-        console.error("Airtable save failed:", airErr);
-      }
+    // If it's NOT final JSON, just return the next question/message
+    if (!parsed) {
+      return res.json({ text, done: false });
     }
 
-    return res.json({ text });
+    // --- If final JSON: save to Airtable (best effort), but DO NOT show JSON to user ---
+    const fields = {
+      // Match your Airtable field names exactly:
+      Airport: parsed.airport ?? "",
+      Outcome: parsed.outcome ?? "",
+      Cause: parsed.cause ?? "",
+      // If your Airtable column name differs, update this key to match exactly.
+      "Minutes Early Left Home":
+        typeof parsed.minutes_early_left_home === "number"
+          ? parsed.minutes_early_left_home
+          : null,
+      Story: parsed.story ?? "",
+      Sentiment: parsed.sentiment ?? "",
+      "Follow Up Opt In": !!parsed.followup_opt_in,
+      Contact: parsed.contact ?? "",
+      "Raw JSON": JSON.stringify(parsed),
+      Source: source || "landing_page",
+      "Created At": new Date().toISOString(),
+    };
+
+    try {
+      await base(TABLE_NAME).create([{ fields }]);
+    } catch (airErr) {
+      // Don't fail the user experience because Airtable had a schema mismatch
+      console.error("Airtable save failed:", airErr?.message || airErr);
+    }
+
+    // Friendly completion message (front-end will redirect when done:true)
+    return res.json({
+      text: "Got it — thank you. Want SkySpot to predict your leave-time next trip?",
+      done: true,
+    });
   } catch (err) {
-    console.error(err);
+    console.error("API error:", err?.message || err);
     return res.status(500).json({ error: "server_error" });
   }
 });
