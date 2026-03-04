@@ -26,7 +26,14 @@ const SYSTEM_PROMPT = `
 You are the SkySpot Airport Stress Line intake assistant.
 Ask ONE question at a time. Finish in <= 6 questions.
 
-When you have enough info, return ONLY valid JSON (no extra words) matching:
+CRITICAL RULES:
+- Do NOT return final JSON unless ALL required fields are collected.
+- If user says "yes" to follow-up but does not provide contact, ask again:
+  "Please share your email or phone so we can follow up."
+- If user says "no", set followup_opt_in to false and contact to null.
+- Do not guess missing values.
+
+Return ONLY valid JSON when complete (no extra words):
 {
   "airport": string,
   "outcome": "Missed"|"Almost Missed"|"Stressed",
@@ -37,11 +44,6 @@ When you have enough info, return ONLY valid JSON (no extra words) matching:
   "followup_opt_in": boolean,
   "contact": string|null
 }
-
-Rules:
-- If user doesn’t know minutes, set minutes_early_left_home to null.
-- Keep questions short. Be empathetic, not chatty.
-- Do not include markdown in the final JSON.
 `;
 
 // More reliable than just checking { } at ends
@@ -108,13 +110,13 @@ app.post("/api/stress", async (req, res) => {
     try {
       await base(TABLE_NAME).create([{ fields }]);
     } catch (airErr) {
-      // Don't fail the user experience because Airtable had a schema mismatch
-      console.error("Airtable save failed:", airErr?.message || airErr);
-    }
+  console.error("Airtable save failed:");
+  console.error(airErr);
+}
 
     // Friendly completion message (front-end will redirect when done:true)
     return res.json({
-      text: "Got it — thank you. Want SkySpot to predict your leave-time next trip?",
+      text: "Got it — thank you for using the Stress Line!",
       done: true,
     });
   } catch (err) {
