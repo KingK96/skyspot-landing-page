@@ -224,7 +224,7 @@
 <style>
   .ss-chat-launch {
     position: fixed; right: 18px; bottom: 18px;
-    background: #0B1220; color: #EAF0FF;
+    background: #eef0f5; color: #0B1220;
     border: 1px solid rgba(255,255,255,0.12);
     border-radius: 999px;
     padding: 12px 16px;
@@ -234,22 +234,23 @@
     z-index: 9999;
   }
   .ss-chat{
-  position: fixed;
-  right: 18px;
-  bottom: 72px;
-  width: min(380px, calc(100vw - 36px));
-  height: min(70vh, 560px);     /* responsive */
-  background: #111A2E;
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 16px;
-  box-shadow: 0 24px 80px rgba(0,0,0,.55);
-  overflow: hidden;
-  display: none;
-  z-index: 9999;
+  position:fixed;
+  right:16px;
+  bottom:70px;
 
-  /* NEW */
-  display: none;
-  flex-direction: column;
+  width:min(380px, calc(100vw - 24px));
+  height:min(75vh, 560px);
+
+  background:#111A2E;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:16px;
+
+  box-shadow:0 24px 80px rgba(0,0,0,.55);
+
+  display:none;
+  flex-direction:column;
+
+  z-index:9999;
 }
   .ss-chat-header{
     background: rgba(11,18,32,0.92);
@@ -270,23 +271,49 @@
   .ss-msg.bot { justify-content:flex-start; }
   .ss-msg.user { justify-content:flex-end; }
   .ss-bubble{
-    max-width: 85%;
-    padding: 10px 12px;
-    border-radius: 14px;
-    line-height: 1.35;
-    font-size: 14px;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-  .ss-msg.bot .ss-bubble{ background: rgba(56,184,196,0.16); }
-  .ss-msg.user .ss-bubble{ background: rgba(255,255,255,0.08); }
+  max-width:80%;
+  padding:10px 14px;
+  border-radius:14px;
+  font-size:14px;
+  line-height:1.4;
+}
+
+/* BOT */
+.ss-bubble.assistant{
+  background:#ffffff;
+  color:#0F172A;
+  border:1px solid rgba(0,0,0,.08);
+}
+
+/* USER */
+.ss-bubble.user{
+  background:#6C8CFF;
+  color:white;
+}
+
   .ss-chat-footer{
-    padding: 12px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    display:flex; gap: 8px;
-    background: rgba(11,18,32,0.6);
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
-    
-  }
+  flex:0 0 auto;
+  padding:12px;
+  display:flex;
+  gap:8px;
+}
+
+.ss-chat-footer input{
+  flex:1;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  font-size:16px;
+}
+
+.ss-chat-footer button{
+  padding:12px 16px;
+  border-radius:8px;
+  border:none;
+  background:#6C8CFF;
+  color:white;
+  cursor:pointer;
+}
   .ss-input{
     flex:1;
     padding: 12px;
@@ -310,18 +337,74 @@
     opacity: 0.75;
     padding: 0 14px 10px;
   }
+  .ss-chat-actions{
+  display:flex;
+  gap:8px;
+}
+
+#ssClear{
+  background:transparent;
+  border:none;
+  color:#8EA2FF;
+  font-size:12px;
+  cursor:pointer;
+}
+
+#ssClear:hover{
+  opacity:.8;
+}
+
+.ss-quick-replies{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:8px;
+}
+
+@media (max-width:600px){
+
+.ss-chat{
+  right:0;
+  bottom:0;
+  width:100vw;
+  height:85vh;
+  border-radius:16px 16px 0 0;
+}
+
+.ss-chat-body{
+  padding:12px;
+}
+
+.ss-quick-replies button{
+  background:#ffffff;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:20px;
+  padding:6px 12px;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.ss-quick-replies button:hover{
+  background:#E5E9FF;
+}
+
+}
 </style>
 
 <button class="ss-chat-launch" id="ssChatLaunch">💬 Airport Stress Line</button>
 
 <div class="ss-chat" id="ssChat">
   <div class="ss-chat-header">
-    <div>
-      <div class="ss-chat-title">SkySpot Airport Stress Line</div>
-      <div class="ss-chat-sub">60 seconds • anonymous • helps train smarter leave-times</div>
-    </div>
-    <div class="ss-chat-close" id="ssChatClose">✕</div>
+  <div>
+    <div class="ss-chat-title">SkySpot Airport Stress Line</div>
+    <div class="ss-chat-sub">60 seconds • Anonymous • Helps train smarter leave-times</div>
   </div>
+
+  <div class="ss-chat-actions">
+    <button id="ssClear" type="button">Restart</button>
+    <button id="ssChatClose" type="button" class="ss-chat-close">✕</button>
+  </div>
+</div>
 
   <div class="ss-note">Share what happened. We’ll ask a few quick questions.</div>
 
@@ -343,18 +426,20 @@
   const input = document.getElementById("ssChatInput");
   const sendBtn = document.getElementById("ssChatSend");
 
-  const messages = []; // { role: "user"|"assistant", content: "..." }
+  let messages = []; // { role: "user"|"assistant", content: "..." }
 
   function addMsg(role, text){
-    const wrap = document.createElement("div");
-    wrap.className = `ss-msg ${role === "assistant" ? "bot" : "user"}`;
-    const bubble = document.createElement("div");
-    bubble.className = "ss-bubble";
-    bubble.textContent = text;
-    wrap.appendChild(bubble);
-    body.appendChild(wrap);
-    body.scrollTop = body.scrollHeight;
-  }
+  const wrap = document.createElement("div");
+  wrap.className = `ss-msg ${role === "assistant" ? "bot" : "user"}`;
+
+  const bubble = document.createElement("div");
+  bubble.className = `ss-bubble ${role === "assistant" ? "assistant" : "user"}`;
+  bubble.textContent = text;
+
+  wrap.appendChild(bubble);
+  body.appendChild(wrap);
+  body.scrollTop = body.scrollHeight;
+}
 
   async function callBot(){
   const resp = await fetch(API_URL, {
@@ -373,7 +458,44 @@
   return data;
 }
 
+
+const clearBtn = document.getElementById("ssClear");
+
+clearBtn.onclick = () => {
+  messages.length = 0;
+
+  body.innerHTML = "";
+
+  addMsg("assistant",
+  "Hi — tell us what happened during your airport trip."
+);
+};
+
+function addQuickReplies(options){
+
+  const container = document.createElement("div");
+  container.className = "ss-quick-replies";
+
+  options.forEach(option=>{
+    const btn = document.createElement("button");
+    btn.textContent = option;
+
+    btn.onclick = ()=>{
+      input.value = option;
+      send();
+      container.remove();
+    };
+
+    container.appendChild(btn);
+  });
+
+  body.appendChild(container);
+  body.scrollTop = body.scrollHeight;
+}
+
+
   async function send(){
+  document.querySelectorAll(".ss-quick-replies").forEach(el => el.remove());
   const text = input.value.trim();
   if(!text) return;
 
@@ -388,12 +510,44 @@
     // NEW: callBot should now return an object: { text: "...", done: true/false }
     const data = await callBot();
     const botText = data.text || "";
+last.querySelector(".ss-bubble").textContent = botText;
+messages.push({ role: "assistant", content: botText });
 
-    // replace the "…" bubble
-    last.querySelector(".ss-bubble").textContent = botText;
+// Trigger quick replies based on the bot's question
+const msg = botText.toLowerCase();
 
-    // keep conversation history
-    messages.push({ role: "assistant", content: botText });
+if(msg.includes("how did the experience make you feel")){
+  addQuickReplies([
+    "Calm",
+    "Annoyed",
+    "Stressed",
+    "Angry",
+    "Anxious"
+  ]);
+}
+
+if(msg.includes("would you like us to follow up")){
+  addQuickReplies([
+    "Yes",
+    "No"
+  ]);
+}
+
+if(msg.includes("which best fits")){
+  addQuickReplies([
+    "Traffic",
+    "TSA",
+    "Parking",
+    "Rideshare",
+    "Airline Delay",
+    "Gate Change",
+    "Baggage",
+    "Navigation",
+    "Cost/Fees",
+    "Underestimated",
+    "Other"
+  ]);
+}
 
     // NEW: redirect when backend says it's done
     if (data.done) {
