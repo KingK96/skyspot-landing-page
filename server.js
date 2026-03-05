@@ -171,7 +171,13 @@ app.post("/api/stress", async (req, res) => {
     if (!parsed) {
       return res.json({ text, done: false });
     }
-
+const rawMinutes = parsed.minutes_early_left_home;
+const minutes =
+  typeof rawMinutes === "number"
+    ? rawMinutes
+    : (typeof rawMinutes === "string" && rawMinutes.trim() !== "" && !isNaN(Number(rawMinutes)))
+      ? Number(rawMinutes)
+      : null;
     // --- If final JSON: save to Airtable (best effort), but DO NOT show JSON to user ---
     const fields = {
       // Match your Airtable field names exactly:
@@ -179,10 +185,7 @@ app.post("/api/stress", async (req, res) => {
       Outcome: parsed.outcome ?? "",
       Cause: parsed.cause ?? "",
       // If your Airtable column name differs, update this key to match exactly.
-      "Minutes Early Left":
-        typeof parsed.minutes_early_left === "number"
-          ? parsed.minutes_early_left
-          : null,
+      "Minutes Early Left": minutes,
       Story: parsed.story ?? "",
       Sentiment: parsed.sentiment ?? "",
       "Follow Up Opt In": !!parsed.follow_up_opt_in,
