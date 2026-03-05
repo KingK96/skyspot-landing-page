@@ -133,7 +133,6 @@ app.post("/api/stress", async (req, res) => {
       Contact: parsed.contact ?? "",
       "Raw JSON": JSON.stringify(parsed),
       Source: source || "landing_page",
-      "Created At": new Date().toISOString(),
     };
 
     try {
