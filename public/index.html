@@ -554,9 +554,9 @@ function addQuickReplies(options){
     btn.textContent = option;
 
     btn.onclick = ()=>{
+      container.remove();
       input.value = option;
       send();
-      container.remove();
     };
 
     container.appendChild(btn);
@@ -567,77 +567,72 @@ function addQuickReplies(options){
 }
 
 
-  async function send(){
-  document.querySelectorAll(".ss-quick-replies").forEach(el => el.remove());
+  let isSending = false;
 
-  const text = input.value.trim();
-  if(!text) return;
+async function send(){
+  if (isSending) return;
+  isSending = true;
 
-  // If we expect a choice, block random typing
-  if (expected?.type === "choice" && !isValidChoice(text)) {
-    addMsg("assistant", "Please tap one of the options below.");
-    addQuickReplies(expected.options || []);
-    input.value = "";
-    return;
-  }
+  try {
+    document.querySelectorAll(".ss-quick-replies").forEach(el => el.remove());
 
-  // If we expect an airport code, validate (3 letters)
-  if (expected?.airport) {
-    const t = text.trim();
-    if (!/^[a-zA-Z]{3}$/.test(t)) {
-      addMsg("assistant", "Please enter a 3-letter airport code (ex: ATL, LAX, JFK).");
+    const text = input.value.trim();
+    if(!text) return;
+
+    // If we expect a choice, block random typing
+    if (expected?.type === "choice" && !isValidChoice(text)) {
+      addMsg("assistant", "Please tap one of the options below.");
+      addQuickReplies(expected.options || []);
       input.value = "";
       return;
     }
-  }
 
-let cleanedText = text;
-if (expected?.airport) cleanedText = text.toUpperCase();
+    // If we expect an airport code, validate (3 letters)
+    if (expected?.airport) {
+      if (!/^[a-zA-Z]{3}$/.test(text)) {
+        addMsg("assistant", "Please enter a 3-letter airport code (ex: ATL, LAX, JFK).");
+        input.value = "";
+        return;
+      }
+    }
 
-messages.push({ role: "user", content: cleanedText });
-addMsg("user", cleanedText);
+    // Normalize text for storage
+    let cleaned = text;
+    if (expected?.airport) cleaned = text.toUpperCase();
 
-  input.value = "";
-  messages.push({ role: "user", content: text });
-  addMsg("user", text);
+    input.value = "";
 
-  addMsg("assistant", "…");
-  const last = body.lastChild;
+    // Push ONLY the cleaned message once
+    messages.push({ role: "user", content: cleaned });
+    addMsg("user", cleaned);
 
-  try{
-    const data = await callBot();        // { text, done }
+    addMsg("assistant", "…");
+    const last = body.lastChild;
+
+    const data = await callBot();
     const botText = data.text || "";
 
     last.querySelector(".ss-bubble").textContent = botText;
     messages.push({ role: "assistant", content: botText });
 
-    // Decide what kind of input is allowed next
+    // Decide what input is allowed next
     const msg = botText.toLowerCase();
-
-    // default: free text
     setExpectedText();
 
-    // airport input
-    if (msg.includes("which airport")) {
-      expected = { type: "text", airport: true };
-    }
+    if (msg.includes("which airport")) expected = { type: "text", airport: true };
 
-    // sentiment choices
     if (msg.includes("how did the experience make you feel")) {
       setExpectedChoice(["Calm","Annoyed","Stressed","Angry","Anxious"]);
     }
 
-    // follow-up choices
     if (msg.includes("would you like us to follow up")) {
       setExpectedChoice(["Yes","No"]);
     }
 
-    // outcome choices
     if (msg.includes("did you miss your flight") || msg.includes("miss your flight")) {
       setExpectedChoice(["Missed","Almost Missed","Stressed"]);
     }
 
-    // cause choices
     if (msg.includes("which best fits")) {
       setExpectedChoice([
         "Traffic","TSA","Parking","Rideshare","Underestimated",
@@ -650,8 +645,16 @@ addMsg("user", cleanedText);
     }
 
   } catch(e){
-    last.querySelector(".ss-bubble").textContent = "Something went wrong. Please try again.";
+    // update the last bubble if possible
+    const last = body.lastChild;
+    if (last?.querySelector?.(".ss-bubble")) {
+      last.querySelector(".ss-bubble").textContent = "Something went wrong. Please try again.";
+    } else {
+      addMsg("assistant","Something went wrong. Please try again.");
+    }
     console.error(e);
+  } finally {
+    isSending = false;
   }
 }
 
