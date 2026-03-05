@@ -171,7 +171,7 @@ app.post("/api/stress", async (req, res) => {
     if (!parsed) {
       return res.json({ text, done: false });
     }
-const rawMinutes = parsed.minutes_early_left_home;
+const rawMinutes = parsed.minutes_early_left;
 const minutes =
   typeof rawMinutes === "number"
     ? rawMinutes
