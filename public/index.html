@@ -253,14 +253,37 @@
   z-index:9999;
 }
   .ss-chat-header{
-    background: rgba(11,18,32,0.92);
-    padding: 14px 14px;
-    display:flex; align-items:center; justify-content:space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding-top: calc(14px + env(safe-area-inset-top));
-  }
-  .ss-chat-title{ font-weight: 800; }
-  .ss-chat-sub{ font-size: 12px; opacity: 0.8; margin-top: 3px; }
+  background: rgba(11,18,32,0.92);
+  padding: 12px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.ss-head-left{
+  display:flex;
+  flex-direction:column;
+  gap: 4px;
+  min-width: 0;
+}
+
+  .ss-chat-title{
+  font-weight: 800;
+  font-size: 16px;
+  color: #EAF0FF;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+  .ss-chat-sub{
+  font-size: 12px;
+  color: rgba(234,240,255,0.72);
+  line-height: 1.2;
+}
+
   .ss-chat-close{ cursor:pointer; opacity:.85; font-weight:800; }
   .ss-chat-body{
   flex: 1 1 auto;       /* NEW */
@@ -314,6 +337,22 @@
   color:white;
   cursor:pointer;
 }
+
+.ss-pill:hover{ background: rgba(255,255,255,0.16); }
+
+.ss-icon-btn{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: #EAF0FF;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ss-icon-btn:hover{ background: rgba(255,255,255,0.14); }
   .ss-input{
     flex:1;
     padding: 12px;
@@ -337,10 +376,24 @@
     opacity: 0.75;
     padding: 0 14px 10px;
   }
-  .ss-chat-actions{
+ .ss-chat-actions{
   display:flex;
-  gap:8px;
+  align-items:center;
+  gap: 8px;
+  flex: 0 0 auto;
 }
+
+.ss-pill{
+  background: rgba(255,255,255,0.10);
+  color: #EAF0FF;
+  border: 1px solid rgba(255,255,255,0.14);
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 
 #ssClear{
   background:transparent;
@@ -395,14 +448,14 @@
 
 <div class="ss-chat" id="ssChat">
   <div class="ss-chat-header">
-  <div>
+  <div class="ss-head-left">
     <div class="ss-chat-title">SkySpot Airport Stress Line</div>
-    <div class="ss-chat-sub">60 seconds • Anonymous • Helps train smarter leave-times</div>
+    <div class="ss-chat-sub">Anonymous • ~60 sec</div>
   </div>
 
   <div class="ss-chat-actions">
-    <button id="ssClear" type="button">Restart</button>
-    <button id="ssChatClose" type="button" class="ss-chat-close">✕</button>
+    <button id="ssClear" type="button" class="ss-pill">Restart</button>
+    <button id="ssChatClose" type="button" class="ss-icon-btn" aria-label="Close">✕</button>
   </div>
 </div>
 
@@ -425,6 +478,26 @@
   const body = document.getElementById("ssChatBody");
   const input = document.getElementById("ssChatInput");
   const sendBtn = document.getElementById("ssChatSend");
+
+let expected = null; // { type: "choice"|"text", options?: string[] }
+
+function normalize(s){ return (s || "").trim().toLowerCase(); }
+
+function setExpectedChoice(options){
+  expected = { type: "choice", options };
+  // show quick replies (you already have addQuickReplies)
+  addQuickReplies(options);
+}
+
+function setExpectedText(){
+  expected = { type: "text" };
+}
+
+function isValidChoice(text){
+  if (!expected || expected.type !== "choice") return true;
+  const t = normalize(text);
+  return expected.options.some(o => normalize(o) === t);
+}
 
   let messages = []; // { role: "user"|"assistant", content: "..." }
 
@@ -467,7 +540,7 @@ clearBtn.onclick = () => {
   body.innerHTML = "";
 
   addMsg("assistant",
-  "Hi — tell us what happened during your airport trip."
+  "Tell me which airport you were flying from (ex: ATL, JFK, LAX)."
 );
 };
 
@@ -496,8 +569,33 @@ function addQuickReplies(options){
 
   async function send(){
   document.querySelectorAll(".ss-quick-replies").forEach(el => el.remove());
+
   const text = input.value.trim();
   if(!text) return;
+
+  // If we expect a choice, block random typing
+  if (expected?.type === "choice" && !isValidChoice(text)) {
+    addMsg("assistant", "Please tap one of the options below.");
+    addQuickReplies(expected.options || []);
+    input.value = "";
+    return;
+  }
+
+  // If we expect an airport code, validate (3 letters)
+  if (expected?.airport) {
+    const t = text.trim();
+    if (!/^[a-zA-Z]{3}$/.test(t)) {
+      addMsg("assistant", "Please enter a 3-letter airport code (ex: ATL, LAX, JFK).");
+      input.value = "";
+      return;
+    }
+  }
+
+let cleanedText = text;
+if (expected?.airport) cleanedText = text.toUpperCase();
+
+messages.push({ role: "user", content: cleanedText });
+addMsg("user", cleanedText);
 
   input.value = "";
   messages.push({ role: "user", content: text });
@@ -507,71 +605,68 @@ function addQuickReplies(options){
   const last = body.lastChild;
 
   try{
-    // NEW: callBot should now return an object: { text: "...", done: true/false }
-    const data = await callBot();
+    const data = await callBot();        // { text, done }
     const botText = data.text || "";
-last.querySelector(".ss-bubble").textContent = botText;
-messages.push({ role: "assistant", content: botText });
 
-// Trigger quick replies based on the bot's question
-const msg = botText.toLowerCase();
+    last.querySelector(".ss-bubble").textContent = botText;
+    messages.push({ role: "assistant", content: botText });
 
-if(msg.includes("how did the experience make you feel")){
-  addQuickReplies([
-    "Calm",
-    "Annoyed",
-    "Stressed",
-    "Angry",
-    "Anxious"
-  ]);
-}
+    // Decide what kind of input is allowed next
+    const msg = botText.toLowerCase();
 
-if(msg.includes("would you like us to follow up")){
-  addQuickReplies([
-    "Yes",
-    "No"
-  ]);
-}
+    // default: free text
+    setExpectedText();
 
-if(msg.includes("which best fits")){
-  addQuickReplies([
-    "Traffic",
-    "TSA",
-    "Parking",
-    "Rideshare",
-    "Airline Delay",
-    "Gate Change",
-    "Baggage",
-    "Navigation",
-    "Cost/Fees",
-    "Underestimated",
-    "Other"
-  ]);
-}
+    // airport input
+    if (msg.includes("which airport")) {
+      expected = { type: "text", airport: true };
+    }
 
-    // NEW: redirect when backend says it's done
+    // sentiment choices
+    if (msg.includes("how did the experience make you feel")) {
+      setExpectedChoice(["Calm","Annoyed","Stressed","Angry","Anxious"]);
+    }
+
+    // follow-up choices
+    if (msg.includes("would you like us to follow up")) {
+      setExpectedChoice(["Yes","No"]);
+    }
+
+    // outcome choices
+    if (msg.includes("did you miss your flight") || msg.includes("miss your flight")) {
+      setExpectedChoice(["Missed","Almost Missed","Stressed"]);
+    }
+
+    // cause choices
+    if (msg.includes("which best fits")) {
+      setExpectedChoice([
+        "Traffic","TSA","Parking","Rideshare","Underestimated",
+        "Airline Delay","Gate Change","Baggage","Navigation","Cost/Fees","Other"
+      ]);
+    }
+
     if (data.done) {
-      setTimeout(() => {
-        window.location.href = "./thanks.html";
-      }, 600);
+      setTimeout(() => window.location.href = "./thanks.html", 600);
     }
 
   } catch(e){
-    last.querySelector(".ss-bubble").textContent =
-      "Something went wrong. Please try again.";
+    last.querySelector(".ss-bubble").textContent = "Something went wrong. Please try again.";
     console.error(e);
   }
 }
 
   launch.addEventListener("click", async () => {
-    chat.style.display = "flex";
-    if (messages.length === 0) {
-      const welcome = "Tell me which airport you were flying from (ex: ATL, JFK, LAX).";
-      messages.push({ role: "assistant", content: welcome });
-      addMsg("assistant", welcome);
-    }
-    input.focus();
-  });
+  chat.style.display = "flex";
+  if (messages.length === 0) {
+    const welcome = "Tell me which airport you were flying from (ex: ATL, JFK, LAX).";
+    messages.push({ role: "assistant", content: welcome });
+    addMsg("assistant", welcome);
+
+    // LOCK airport input on first prompt
+    expected = { type: "text", airport: true };
+  }
+  input.focus();
+});
 
   closeBtn.addEventListener("click", () => chat.style.display = "none");
   sendBtn.addEventListener("click", send);
