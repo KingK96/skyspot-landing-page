@@ -144,7 +144,42 @@
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(0,0,0,0.20);
 }
+.ss-press-strip{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:18px;
 
+  padding:10px 18px;
+
+  background:rgba(255,255,255,0.03);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.ss-press-text{
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.55);
+}
+
+.ss-press-item{
+  display:flex;
+  align-items:center;
+  opacity:.9;
+  transition:all .2s ease;
+}
+
+.ss-press-item:hover{
+  opacity:1;
+  transform:translateY(-1px);
+}
+
+.ss-press-item img{
+  height:18px;
+  width:auto;
+}
 
     .section{
       padding:70px 24px;
@@ -169,7 +204,22 @@
 </head>
 
 <body>
+<div class="ss-press-strip">
 
+  <span class="ss-press-text">As Featured In</span>
+
+  <a 
+    href="https://afrotech.com/keshawn-alexander-built-an-ai-powered-trip-intelligence-tool-airport"
+    target="_blank"
+    class="ss-press-item"
+  >
+    <img 
+      src="https://upload.wikimedia.org/wikipedia/commons/5/5a/AfroTech_logo.png"
+      alt="AfroTech"
+    />
+  </a>
+
+</div>
   <div class="hero">
     <img src="./skyspot-logo.png" alt="SkySpot logo" class="logo">
 
