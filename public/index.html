@@ -48,9 +48,11 @@
 
     .trust{
       margin-top:14px;
-      font-size:13px;
+      font-size:14px;
       color: rgba(234,240,255,0.85);
       opacity: 0.95;
+      max-width: 760px;
+      line-height: 1.5;
     }
 
     .ctaRow{
@@ -206,10 +208,28 @@
       border: 1px solid rgba(255,255,255,0.06);
     }
 
+    .footer-card{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:36px;
+      flex-wrap:wrap;
+    }
+
+    .footer-logo{
+      display:block;
+      height:34px;
+      width:auto;
+      object-fit:contain;
+      filter: brightness(1.02);
+    }
+
     @media (max-width: 640px){
       h1{ font-size:40px; }
       .sub{ font-size:16px; }
       .logo{ width:108px; }
+      .footer-card{ gap:24px; }
+      .footer-logo{ height:28px; }
     }
   </style>
 </head>
@@ -238,7 +258,7 @@
     </div>
 
     <div class="trust">
-      Now in beta across <strong>ATL • LAX • JFK • ORD • DFW • BWI • DCA</strong>
+      SkySpot is currently in beta across <strong>ATL, LAX, JFK, ORD, DFW, DCA and BWI</strong>.
     </div>
 
     <div class="ctaRow">
@@ -273,8 +293,17 @@
   </div>
 
   <div class="section">
-    <div class="card">
-      SkySpot is currently in beta across ATL, LAX, JFK, ORD, DFW, DCA and BWI.
+    <div class="card footer-card">
+      <img
+        src="/assets/logos/Afrotechlogo-82f020252aeb42da876ea15ac55fc677.jpg"
+        alt="AfroTech logo"
+        class="footer-logo"
+      >
+      <img
+        src="/assets/logos/BLACK_ENTERPRISE_LOGO-1.jpg"
+        alt="Black Enterprise logo"
+        class="footer-logo"
+      >
     </div>
   </div>
 

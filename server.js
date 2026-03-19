@@ -5,6 +5,7 @@ import Airtable from "airtable";
 const app = express();
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static("public"));
+app.use("/assets", express.static("assets"));
 
 // --- Sanity checks (helps you debug fast in Render logs) ---
 const REQUIRED_ENVS = ["OPENAI_API_KEY", "AIRTABLE_API_KEY", "AIRTABLE_BASE_ID", "AIRTABLE_TABLE_NAME"];
