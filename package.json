@@ -7,8 +7,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-  "express": "^4.19.2",
-  "openai": "^4.57.0",
-  "airtable": "^0.12.2"
-}
+    "airtable": "^0.12.2",
+    "express": "^4.22.2",
+    "openai": "^4.57.0"
+  }
 }

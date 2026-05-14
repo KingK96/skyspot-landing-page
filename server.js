@@ -1,6 +1,38 @@
 import express from "express";
 import OpenAI from "openai";
 import Airtable from "airtable";
+import fs from "fs";
+
+function loadEnvFile(path = ".env", ignoredKeys = new Set()) {
+  if (!fs.existsSync(path)) return;
+
+  const env = fs.readFileSync(path, "utf8");
+
+  for (const line of env.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const equalsIndex = trimmed.indexOf("=");
+    if (equalsIndex === -1) continue;
+
+    const key = trimmed.slice(0, equalsIndex).trim();
+    let value = trimmed.slice(equalsIndex + 1).trim();
+
+    if (!key || ignoredKeys.has(key) || process.env[key]) continue;
+
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    process.env[key] = value;
+  }
+}
+
+loadEnvFile();
+loadEnvFile("../skyspot/backend/.env", new Set(["PORT"]));
 
 const app = express();
 app.use(express.json({ limit: "1mb" }));
@@ -13,13 +45,15 @@ for (const k of REQUIRED_ENVS) {
   if (!process.env[k]) console.warn(`[WARN] Missing env var: ${k}`);
 }
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const client = process.env.OPENAI_API_KEY
+  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+  : null;
 
 // Airtable setup
-const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(
-  process.env.AIRTABLE_BASE_ID
-);
-
+const airtableBase =
+  process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID
+    ? new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID)
+    : null;
 const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME || "Submissions";
 
 // NOTE: These enum labels should match your Airtable Single Select options EXACTLY.
@@ -150,13 +184,172 @@ function extractJsonObject(text) {
 // Optional health check
 app.get("/health", (req, res) => res.json({ ok: true }));
 
+const AIRPORT_DESTINATIONS = {
+  ATL: "Hartsfield-Jackson Atlanta International Airport, Atlanta, GA",
+  LAX: "Los Angeles International Airport, Los Angeles, CA",
+  JFK: "John F. Kennedy International Airport, Queens, NY",
+  MIA: "Miami International Airport, Miami, FL",
+  DFW: "Dallas Fort Worth International Airport, Dallas, TX",
+  SEA: "Seattle-Tacoma International Airport, Seattle, WA",
+  BOS: "Boston Logan International Airport, Boston, MA",
+  PHL: "Philadelphia International Airport, Philadelphia, PA",
+  SFO: "San Francisco International Airport, San Francisco, CA",
+  IAH: "George Bush Intercontinental Airport, Houston, TX",
+  MCI: "Kansas City International Airport, Kansas City, MO",
+};
+
+const AIRPORT_COORDS = {
+  ATL: { latitude: 33.6407, longitude: -84.4277 },
+  LAX: { latitude: 33.9416, longitude: -118.4085 },
+  JFK: { latitude: 40.6413, longitude: -73.7781 },
+  MIA: { latitude: 25.7959, longitude: -80.2870 },
+  DFW: { latitude: 32.8998, longitude: -97.0403 },
+  SEA: { latitude: 47.4502, longitude: -122.3088 },
+  BOS: { latitude: 42.3656, longitude: -71.0096 },
+  PHL: { latitude: 39.8744, longitude: -75.2424 },
+  SFO: { latitude: 37.6213, longitude: -122.3790 },
+  IAH: { latitude: 29.9902, longitude: -95.3368 },
+  MCI: { latitude: 39.2976, longitude: -94.7139 },
+};
+
+function parseGoogleDuration(duration) {
+  const match = /^(\d+(?:\.\d+)?)s$/.exec(duration || "");
+  if (!match) return null;
+  return Math.max(1, Math.round(Number(match[1]) / 60));
+}
+
+function getPlacesApiKey() {
+  return process.env.GOOGLE_PLACES_API_KEY || process.env.GOOGLE_MAPS_API_KEY;
+}
+
+function getRoutesApiKey() {
+  return process.env.GOOGLE_ROUTES_API_KEY || process.env.GOOGLE_MAPS_API_KEY;
+}
+
+app.post("/api/place-autocomplete", async (req, res) => {
+  try {
+    const { input, airport } = req.body || {};
+    const normalizedInput = String(input || "").trim();
+    const normalizedAirport = String(airport || "ATL").toUpperCase();
+    const airportCoords = AIRPORT_COORDS[normalizedAirport] || AIRPORT_COORDS.ATL;
+
+    if (normalizedInput.length < 2) {
+      return res.json({ suggestions: [] });
+    }
+
+    const placesApiKey = getPlacesApiKey();
+
+    if (!placesApiKey) {
+      return res.status(500).json({ error: "Missing GOOGLE_PLACES_API_KEY or GOOGLE_MAPS_API_KEY" });
+    }
+
+    const googleResp = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": placesApiKey,
+        "X-Goog-FieldMask": "suggestions.placePrediction.placeId,suggestions.placePrediction.text.text",
+      },
+      body: JSON.stringify({
+        input: normalizedInput,
+        includedRegionCodes: ["us"],
+        regionCode: "us",
+        locationBias: {
+          circle: {
+            center: airportCoords,
+            radius: 50000,
+          },
+        },
+      }),
+    });
+
+    if (!googleResp.ok) {
+      const text = await googleResp.text().catch(() => "");
+      console.error("Google Places Autocomplete failed:", googleResp.status, text);
+      return res.status(502).json({ error: "places_api_failed" });
+    }
+
+    const data = await googleResp.json();
+    const suggestions = (data.suggestions || [])
+      .map((suggestion) => suggestion.placePrediction)
+      .filter(Boolean)
+      .map((prediction) => ({
+        placeId: prediction.placeId,
+        text: prediction.text?.text,
+      }))
+      .filter((prediction) => prediction.text);
+
+    return res.json({ suggestions });
+  } catch (err) {
+    console.error("Place autocomplete API error:", err?.message || err);
+    return res.status(500).json({ error: "server_error" });
+  }
+});
+
+app.post("/api/drive-time", async (req, res) => {
+  try {
+    const { origin, airport } = req.body || {};
+    const normalizedAirport = String(airport || "").toUpperCase();
+    const destination = AIRPORT_DESTINATIONS[normalizedAirport];
+
+    if (!origin || !destination) {
+      return res.status(400).json({ error: "origin and supported airport are required" });
+    }
+
+    const routesApiKey = getRoutesApiKey();
+
+    if (!routesApiKey) {
+      return res.status(500).json({ error: "Missing GOOGLE_ROUTES_API_KEY or GOOGLE_MAPS_API_KEY" });
+    }
+
+    const googleResp = await fetch("https://routes.googleapis.com/directions/v2:computeRoutes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": routesApiKey,
+        "X-Goog-FieldMask": "routes.duration,routes.distanceMeters",
+      },
+      body: JSON.stringify({
+        origin: { address: origin },
+        destination: { address: destination },
+        travelMode: "DRIVE",
+        routingPreference: "TRAFFIC_AWARE_OPTIMAL",
+        units: "IMPERIAL",
+      }),
+    });
+
+    if (!googleResp.ok) {
+      const text = await googleResp.text().catch(() => "");
+      console.error("Google Routes API failed:", googleResp.status, text);
+      return res.status(502).json({ error: "routes_api_failed" });
+    }
+
+    const data = await googleResp.json();
+    const route = data.routes?.[0];
+    const minutes = parseGoogleDuration(route?.duration);
+
+    if (!minutes) {
+      return res.status(502).json({ error: "routes_api_missing_duration" });
+    }
+
+    return res.json({
+      minutes,
+      distanceMeters: route.distanceMeters ?? null,
+      source: "google_routes",
+    });
+  } catch (err) {
+    console.error("Drive time API error:", err?.message || err);
+    return res.status(500).json({ error: "server_error" });
+  }
+});
+
 app.post("/api/stress", async (req, res) => {
   try {
     const { messages, source } = req.body || {};
     if (!Array.isArray(messages)) {
       return res.status(400).json({ error: "messages must be an array" });
     }
-    if (!process.env.OPENAI_API_KEY) {
+    if (!client) {
       return res.status(500).json({ error: "Missing OPENAI_API_KEY" });
     }
 
@@ -195,12 +388,16 @@ const minutes =
       Source: source || "landing_page",
     };
 
-    try {
-      await base(TABLE_NAME).create([{ fields }]);
-    } catch (airErr) {
-  console.error("Airtable save failed:");
-  console.error(airErr);
-}
+    if (airtableBase) {
+      try {
+        await airtableBase(TABLE_NAME).create([{ fields }]);
+      } catch (airErr) {
+        console.error("Airtable save failed:");
+        console.error(airErr);
+      }
+    } else {
+      console.warn("Airtable save skipped: missing Airtable env vars");
+    }
 
     // Friendly completion message (front-end will redirect when done:true)
     return res.json({
