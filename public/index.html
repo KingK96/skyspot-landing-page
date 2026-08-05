@@ -224,17 +224,17 @@
       filter: brightness(1.02);
     }
 
-    .worldcup-section{
+    .intern-section{
       padding:70px 24px;
       background:#0B1220;
     }
 
-    .worldcup-inner{
+    .intern-inner{
       max-width:1000px;
       margin:0 auto;
     }
 
-    .worldcup-kicker{
+    .intern-kicker{
       margin:0 0 10px;
       color:#38B8C4;
       font-size:12px;
@@ -243,7 +243,7 @@
       text-transform:uppercase;
     }
 
-    .worldcup-title{
+    .intern-title{
       max-width:780px;
       margin:0;
       font-size:38px;
@@ -251,7 +251,32 @@
       font-weight:750;
     }
 
-    .worldcup-grid{
+    .intern-intro{
+      max-width:760px;
+      margin:14px 0 0;
+      color:rgba(234,240,255,0.78);
+      font-size:17px;
+      line-height:1.55;
+    }
+
+    .intern-pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .intern-pill{
+      border-radius:999px;
+      background:rgba(56,184,196,0.16);
+      border:1px solid rgba(56,184,196,0.24);
+      color:#D6F3F7;
+      padding:9px 14px;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .intern-grid{
       display:grid;
       grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
       gap:22px;
@@ -259,8 +284,8 @@
       margin-top:28px;
     }
 
-    .worldcup-panel,
-    .worldcup-result{
+    .intern-panel,
+    .intern-apply{
       background:#111A2E;
       border:1px solid rgba(255,255,255,0.08);
       border-radius:16px;
@@ -268,189 +293,112 @@
       box-shadow:0 22px 60px rgba(0,0,0,.24);
     }
 
-    .worldcup-field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      margin-bottom:18px;
-      text-align:left;
-    }
-
-    .worldcup-field label,
-    .worldcup-toggle-label{
-      color:rgba(234,240,255,0.78);
-      font-size:13px;
-      font-weight:750;
-    }
-
-    .worldcup-field select,
-    .worldcup-field input{
-      width:100%;
-      box-sizing:border-box;
-      border:1px solid rgba(255,255,255,0.12);
-      border-radius:12px;
-      background:#0B1220;
-      color:#EAF0FF;
-      padding:14px 13px;
-      font-size:16px;
-      outline:none;
-    }
-
-    .worldcup-field select:focus,
-    .worldcup-field input:focus{
-      border-color:rgba(56,184,196,0.72);
-      box-shadow:0 0 0 3px rgba(56,184,196,0.14);
-    }
-
-    .worldcup-location-wrap{
-      position:relative;
-    }
-
-    .worldcup-suggestions{
-      position:absolute;
-      left:0;
-      right:0;
-      top:calc(100% + 8px);
-      display:none;
-      z-index:20;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,0.12);
-      border-radius:12px;
-      background:#0B1220;
-      box-shadow:0 18px 44px rgba(0,0,0,.38);
-    }
-
-    .worldcup-suggestion{
-      width:100%;
-      border:0;
-      border-bottom:1px solid rgba(255,255,255,0.08);
-      background:transparent;
-      color:#EAF0FF;
-      padding:12px 13px;
-      text-align:left;
-      font-size:14px;
-      line-height:1.35;
-      cursor:pointer;
-    }
-
-    .worldcup-suggestion:hover,
-    .worldcup-suggestion.is-highlighted{
-      background:rgba(56,184,196,0.16);
-    }
-
-    .worldcup-google{
-      padding:8px 13px 9px;
-      color:rgba(234,240,255,0.48);
-      font-size:11px;
-      text-align:right;
-    }
-
-    .worldcup-toggles{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:8px;
-    }
-
-    .worldcup-toggle{
-      border:1px solid rgba(255,255,255,0.13);
-      border-radius:999px;
-      background:rgba(255,255,255,0.07);
-      color:#EAF0FF;
-      padding:11px 14px;
-      font-weight:800;
-      cursor:pointer;
-      transition:background .2s ease, border-color .2s ease, transform .2s ease;
-    }
-
-    .worldcup-toggle:hover{
-      transform:translateY(-1px);
-      background:rgba(255,255,255,0.11);
-    }
-
-    .worldcup-toggle.is-active{
-      color:#0B1220;
-      background:#D6F3F7;
-      border-color:#D6F3F7;
-    }
-
-    .worldcup-calc{
-      width:100%;
-      margin-top:22px;
-      border:0;
-      border-radius:12px;
-      background:linear-gradient(135deg,#38B8C4,#2397A5);
-      color:#fff;
-      padding:15px 18px;
-      font-size:16px;
-      font-weight:850;
-      cursor:pointer;
-    }
-
-    .worldcup-result{
-      scroll-margin-top:24px;
-    }
-
-    .worldcup-result-eyebrow{
+    .intern-card-title{
       margin:0 0 8px;
-      color:rgba(234,240,255,0.66);
-      font-size:13px;
-      font-weight:750;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-
-    .worldcup-leave-time{
-      margin:0 0 20px;
-      font-size:28px;
-      line-height:1.15;
+      color:#EAF0FF;
+      font-size:20px;
       font-weight:850;
     }
 
-    .worldcup-leave-time span{
-      color:#D6F3F7;
-    }
-
-    .worldcup-breakdown{
+    .intern-list{
       display:grid;
       gap:10px;
-      margin-bottom:22px;
+      margin:16px 0 0;
+      padding:0;
+      list-style:none;
     }
 
-    .worldcup-row{
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      padding:11px 0;
-      border-bottom:1px solid rgba(255,255,255,0.08);
+    .intern-list li{
       color:rgba(234,240,255,0.82);
-      font-size:14px;
+      line-height:1.45;
     }
 
-    .worldcup-row strong{
-      color:#EAF0FF;
-      white-space:nowrap;
+    .intern-list li::before{
+      content:"";
+      display:inline-block;
+      width:7px;
+      height:7px;
+      margin-right:10px;
+      border-radius:999px;
+      background:#38B8C4;
+      vertical-align:middle;
     }
 
-    .worldcup-note{
-      color:rgba(234,240,255,0.62);
-      font-size:12px;
-      line-height:1.4;
+    .intern-benefits{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:10px;
+      margin-top:18px;
     }
 
-    .worldcup-cta{
+    .intern-benefit{
+      background:rgba(255,255,255,0.06);
+      border-radius:12px;
+      padding:12px 13px;
+      color:rgba(234,240,255,0.86);
+      font-weight:750;
+    }
+
+    .intern-apply{
+      text-align:center;
+    }
+
+    .intern-qr{
+      width:min(230px, 70vw);
+      height:auto;
+      display:block;
+      margin:18px auto;
+      border-radius:12px;
+      background:#fff;
+      padding:10px;
+    }
+
+    .intern-cta{
       display:inline-flex;
       align-items:center;
       justify-content:center;
       width:100%;
       box-sizing:border-box;
       border-radius:12px;
-      background:#EAF0FF;
-      color:#0B1220;
-      padding:14px 16px;
+      background:linear-gradient(135deg,#38B8C4,#2397A5);
+      color:#fff;
+      padding:15px 16px;
       text-decoration:none;
       font-weight:850;
       line-height:1.3;
+      text-align:center;
+    }
+
+    .intern-pdf{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      box-sizing:border-box;
+      margin-top:10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.07);
+      color:#EAF0FF;
+      padding:13px 16px;
+      text-decoration:none;
+      font-weight:800;
+    }
+
+    .intern-note{
+      margin:14px 0 0;
+      color:rgba(234,240,255,0.66);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .intern-limited{
+      margin-top:22px;
+      border-radius:14px;
+      background:#D6F3F7;
+      color:#0B1220;
+      padding:15px 18px;
+      font-weight:850;
       text-align:center;
     }
 
@@ -458,12 +406,12 @@
       h1{ font-size:40px; }
       .sub{ font-size:16px; }
       .logo{ width:108px; }
-      .worldcup-section{ padding:54px 18px; }
-      .worldcup-title{ font-size:30px; }
-      .worldcup-grid{ grid-template-columns:1fr; }
-      .worldcup-panel,
-      .worldcup-result{ padding:20px; }
-      .worldcup-leave-time{ font-size:24px; }
+      .intern-section{ padding:54px 18px; }
+      .intern-title{ font-size:30px; }
+      .intern-grid{ grid-template-columns:1fr; }
+      .intern-panel,
+      .intern-apply{ padding:20px; }
+      .intern-benefits{ grid-template-columns:1fr; }
       .footer-card{ gap:24px; }
       .footer-logo{ height:28px; }
     }
@@ -516,87 +464,54 @@
 
   </div>
 
-  <section class="worldcup-section" id="worldcup-mode">
-    <div class="worldcup-inner">
-      <p class="worldcup-kicker">World Cup Airport Mode</p>
-      <h2 class="worldcup-title">Flying for the World Cup? Know exactly when to leave for the airport.</h2>
+  <section class="intern-section" id="internship">
+    <div class="intern-inner">
+      <p class="intern-kicker">Fall 2026 Internship</p>
+      <h2 class="intern-title">Help build the future of airport travel with SkySpot.</h2>
+      <p class="intern-intro">
+        SkySpot is recruiting 1-2 HBCU undergraduate students for a remote Social Media Marketing Internship.
+        Work directly with the founder, build real campaigns, and help define the public voice of an AI travel startup.
+      </p>
 
-      <div class="worldcup-grid">
-        <div class="worldcup-panel">
-          <div class="worldcup-field">
-            <label for="wcAirport">Select City</label>
-            <select id="wcAirport">
-              <option value="ATL" selected>ATL</option>
-              <option value="LAX">LAX</option>
-              <option value="JFK">JFK</option>
-              <option value="MIA">MIA</option>
-              <option value="DFW">DFW</option>
-              <option value="SEA">SEA</option>
-              <option value="BOS">BOS</option>
-              <option value="PHL">PHL</option>
-              <option value="SFO">SFO</option>
-              <option value="IAH">IAH</option>
-              <option value="MCI">MCI</option>
-            </select>
+      <div class="intern-pills">
+        <span class="intern-pill">HBCU undergraduates</span>
+        <span class="intern-pill">College credit available</span>
+        <span class="intern-pill">Remote</span>
+        <span class="intern-pill">10-15 hours/week</span>
+      </div>
+
+      <div class="intern-grid">
+        <div class="intern-panel">
+          <h3 class="intern-card-title">What you will do</h3>
+          <ul class="intern-list">
+            <li>Create social media content, graphics, carousels, and short-form videos.</li>
+            <li>Build weekly content calendars and support product launch storytelling.</li>
+            <li>Help grow the SkySpot community through founder stories and conference marketing.</li>
+          </ul>
+
+          <h3 class="intern-card-title" style="margin-top:24px;">What you will learn</h3>
+          <div class="intern-benefits">
+            <div class="intern-benefit">Startup marketing</div>
+            <div class="intern-benefit">Product marketing</div>
+            <div class="intern-benefit">Brand strategy</div>
+            <div class="intern-benefit">Growth analytics</div>
           </div>
 
-          <div class="worldcup-field">
-            <label for="wcLocation">Starting location</label>
-            <div class="worldcup-location-wrap">
-              <input
-                id="wcLocation"
-                type="text"
-                placeholder="Hotel, neighborhood, or ZIP code"
-                autocomplete="off"
-                aria-autocomplete="list"
-                aria-controls="wcLocationSuggestions"
-              >
-              <div class="worldcup-suggestions" id="wcLocationSuggestions" role="listbox"></div>
-            </div>
-          </div>
-
-          <div class="worldcup-field">
-            <label for="wcFlightTime">Flight departure time</label>
-            <input id="wcFlightTime" type="time">
-          </div>
-
-          <div>
-            <div class="worldcup-toggle-label">Security lane</div>
-            <div class="worldcup-toggles" role="group" aria-label="Security lane">
-              <button class="worldcup-toggle is-active" type="button" data-lane="standard">Standard TSA</button>
-              <button class="worldcup-toggle" type="button" data-lane="precheck">TSA PreCheck</button>
-              <button class="worldcup-toggle" type="button" data-lane="clear">CLEAR</button>
-            </div>
-          </div>
-
-          <button class="worldcup-calc" type="button" id="wcCalculate">Calculate leave-by time</button>
+          <div class="intern-limited">Only 1-2 interns will be selected for Fall 2026.</div>
         </div>
 
-        <div class="worldcup-result" id="wcResult" aria-live="polite">
-          <p class="worldcup-result-eyebrow">Simulated recommendation</p>
-          <p class="worldcup-leave-time">You should leave at <span id="wcLeaveTime">--:--</span></p>
-
-          <div class="worldcup-breakdown">
-            <div class="worldcup-row">
-              <span>Drive time <span class="worldcup-note" id="wcDriveNote">(Simulated from location)</span></span>
-              <strong id="wcDrive">25 min</strong>
-            </div>
-            <div class="worldcup-row">
-              <span>TSA time <span class="worldcup-note">(Elevated due to World Cup demand)</span></span>
-              <strong id="wcTsa">-- min</strong>
-            </div>
-            <div class="worldcup-row">
-              <span>Terminal walk</span>
-              <strong id="wcWalk">12 min</strong>
-            </div>
-            <div class="worldcup-row">
-              <span>Buffer</span>
-              <strong id="wcBuffer">20 min</strong>
-            </div>
-          </div>
-
-          <a class="worldcup-cta" href="https://testflight.apple.com/join/kj3hCPzn">
-            Get real-time predictions for your actual trip &rarr; Try SkySpot
+        <div class="intern-apply">
+          <h3 class="intern-card-title">Apply to intern with SkySpot</h3>
+          <p class="intern-note">
+            Submit your resume, optional portfolio, a short note on why you want to join SkySpot,
+            and one creative social media idea that would convince someone to download SkySpot before their next flight.
+          </p>
+          <img src="/intern-application-qr.png" alt="QR code for the SkySpot internship application" class="intern-qr">
+          <a class="intern-cta" href="https://forms.gle/54NrqM8KbGZiv5Rv9" target="_blank" rel="noopener noreferrer">
+            Apply now
+          </a>
+          <a class="intern-pdf" href="/skyspot-ai-travel-recruiting-brochure.pdf" download>
+            Download internship brochure
           </a>
         </div>
       </div>
@@ -652,361 +567,6 @@
       </a>
   </div>
 </div>
-
-<script>
-  (function(){
-    const airportBaseTsa = {
-      ATL: 35,
-      LAX: 30,
-      JFK: 32,
-      MIA: 28,
-      DFW: 27,
-      SEA: 26,
-      BOS: 25,
-      PHL: 24,
-      SFO: 29,
-      IAH: 26,
-      MCI: 22
-    };
-
-    const laneModifiers = {
-      standard: 0,
-      precheck: -10,
-      clear: -15
-    };
-
-    const defaultDriveTime = 25;
-
-    const airportDriveBase = {
-      ATL: 24,
-      LAX: 36,
-      JFK: 48,
-      MIA: 24,
-      DFW: 28,
-      SEA: 30,
-      BOS: 26,
-      PHL: 24,
-      SFO: 34,
-      IAH: 32,
-      MCI: 22
-    };
-
-    const fixedTimes = {
-      walk: 12,
-      buffer: 20
-    };
-
-    const airport = document.getElementById("wcAirport");
-    const location = document.getElementById("wcLocation");
-    const locationSuggestions = document.getElementById("wcLocationSuggestions");
-    const flightTime = document.getElementById("wcFlightTime");
-    const toggles = document.querySelectorAll(".worldcup-toggle");
-    const calculate = document.getElementById("wcCalculate");
-    const result = document.getElementById("wcResult");
-    const leaveTime = document.getElementById("wcLeaveTime");
-    const tsa = document.getElementById("wcTsa");
-    const drive = document.getElementById("wcDrive");
-    const driveNote = document.getElementById("wcDriveNote");
-    const walk = document.getElementById("wcWalk");
-    const buffer = document.getElementById("wcBuffer");
-
-    let selectedLane = "standard";
-    let requestId = 0;
-    let autocompleteTimer = null;
-    let autocompleteRequestId = 0;
-    let highlightedSuggestion = -1;
-    let currentSuggestions = [];
-
-    function pad(value){
-      return String(value).padStart(2, "0");
-    }
-
-    function formatTimeInput(date){
-      return `${pad(date.getHours())}:${pad(date.getMinutes())}`;
-    }
-
-    function formatDisplayTime(date){
-      return date.toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit"
-      });
-    }
-
-    function getDepartureDate(){
-      const [hours, minutes] = (flightTime.value || "00:00").split(":").map(Number);
-      const departure = new Date();
-      departure.setHours(hours, minutes, 0, 0);
-
-      if (departure < new Date()) {
-        departure.setDate(departure.getDate() + 1);
-      }
-
-      return departure;
-    }
-
-    function hashLocation(value){
-      return value.split("").reduce((total, char) => total + char.charCodeAt(0), 0);
-    }
-
-    function estimateDriveTime(){
-      const rawLocation = location.value.trim().toLowerCase();
-
-      if (!rawLocation) {
-        return defaultDriveTime;
-      }
-
-      const airportBase = airportDriveBase[airport.value] || defaultDriveTime;
-      let modifier = (hashLocation(`${airport.value}-${rawLocation}`) % 25) - 6;
-
-      if (rawLocation.includes("airport") || rawLocation.includes("terminal") || rawLocation.includes("near")) {
-        modifier -= 12;
-      }
-
-      if (rawLocation.includes("downtown") || rawLocation.includes("midtown") || rawLocation.includes("hotel")) {
-        modifier += 2;
-      }
-
-      if (
-        rawLocation.includes("suburb") ||
-        rawLocation.includes("north") ||
-        rawLocation.includes("south") ||
-        rawLocation.includes("east") ||
-        rawLocation.includes("west")
-      ) {
-        modifier += 12;
-      }
-
-      if (/\b\d{5}\b/.test(rawLocation)) {
-        modifier += hashLocation(rawLocation.match(/\b\d{5}\b/)[0]) % 10;
-      }
-
-      return Math.max(12, Math.min(75, airportBase + modifier));
-    }
-
-    function hideSuggestions(){
-      locationSuggestions.style.display = "none";
-      locationSuggestions.innerHTML = "";
-      highlightedSuggestion = -1;
-      currentSuggestions = [];
-    }
-
-    function renderSuggestions(suggestions){
-      currentSuggestions = suggestions;
-      highlightedSuggestion = -1;
-
-      if (!suggestions.length) {
-        hideSuggestions();
-        return;
-      }
-
-      locationSuggestions.innerHTML = "";
-
-      suggestions.forEach((suggestion, index) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "worldcup-suggestion";
-        button.setAttribute("role", "option");
-        button.textContent = suggestion.text;
-
-        button.addEventListener("mousedown", (event) => {
-          event.preventDefault();
-          selectSuggestion(index);
-        });
-
-        locationSuggestions.appendChild(button);
-      });
-
-      const attribution = document.createElement("div");
-      attribution.className = "worldcup-google";
-      attribution.textContent = "Powered by Google";
-      locationSuggestions.appendChild(attribution);
-      locationSuggestions.style.display = "block";
-    }
-
-    function updateHighlightedSuggestion(){
-      const options = locationSuggestions.querySelectorAll(".worldcup-suggestion");
-      options.forEach((option, index) => {
-        option.classList.toggle("is-highlighted", index === highlightedSuggestion);
-      });
-    }
-
-    function selectSuggestion(index){
-      const suggestion = currentSuggestions[index];
-      if (!suggestion) return;
-
-      location.value = suggestion.text;
-      hideSuggestions();
-      calculateRecommendation(false, false);
-    }
-
-    async function fetchLocationSuggestions(){
-      const input = location.value.trim();
-      const currentRequest = ++autocompleteRequestId;
-
-      if (input.length < 2 || window.location.protocol === "file:") {
-        hideSuggestions();
-        return;
-      }
-
-      try {
-        const response = await fetch("/api/place-autocomplete", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            input,
-            airport: airport.value
-          })
-        });
-
-        if (currentRequest !== autocompleteRequestId) return;
-
-        if (!response.ok) {
-          hideSuggestions();
-          return;
-        }
-
-        const data = await response.json();
-        renderSuggestions(data.suggestions || []);
-      } catch {
-        hideSuggestions();
-      }
-    }
-
-    async function getRealtimeDriveTime(){
-      const origin = location.value.trim();
-
-      if (!origin || window.location.protocol === "file:") {
-        return null;
-      }
-
-      const response = await fetch("/api/drive-time", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          origin,
-          airport: airport.value
-        })
-      });
-
-      if (!response.ok) {
-        return null;
-      }
-
-      const data = await response.json();
-      return Number.isFinite(data.minutes) ? data.minutes : null;
-    }
-
-    async function calculateRecommendation(shouldScroll, useRealtimeDrive){
-      const currentRequest = ++requestId;
-      const baseTsa = airportBaseTsa[airport.value] || airportBaseTsa.ATL;
-      const adjustedTsa = Math.max(0, baseTsa + laneModifiers[selectedLane]);
-      const elevatedTsa = Math.round(adjustedTsa * 1.25);
-      let driveTime = estimateDriveTime();
-      let driveSource = location.value.trim() ? "simulated" : "default";
-
-      if (useRealtimeDrive && location.value.trim() && window.location.protocol === "file:") {
-        driveSource = "server_required";
-      }
-
-      if (useRealtimeDrive && location.value.trim() && window.location.protocol !== "file:") {
-        drive.textContent = "Estimating...";
-        driveNote.textContent = "(Checking live traffic)";
-
-        const realtimeDriveTime = await getRealtimeDriveTime();
-        if (currentRequest !== requestId) return;
-
-        if (realtimeDriveTime) {
-          driveTime = realtimeDriveTime;
-          driveSource = "realtime";
-        } else {
-          driveSource = "unavailable";
-        }
-      }
-
-      const totalMinutes = driveTime + elevatedTsa + fixedTimes.walk + fixedTimes.buffer;
-      const leaveBy = new Date(getDepartureDate().getTime() - totalMinutes * 60000);
-
-      leaveTime.textContent = formatDisplayTime(leaveBy);
-      tsa.textContent = `${elevatedTsa} min`;
-      drive.textContent = `${driveTime} min`;
-      driveNote.textContent =
-        driveSource === "realtime"
-          ? "(Live traffic estimate)"
-          : driveSource === "server_required"
-            ? "(Open from server for live traffic)"
-            : driveSource === "unavailable"
-              ? "(Live traffic unavailable)"
-          : location.value.trim()
-            ? "(Simulated from location)"
-            : "(Default estimate)";
-      walk.textContent = `${fixedTimes.walk} min`;
-      buffer.textContent = `${fixedTimes.buffer} min`;
-
-      if (shouldScroll) {
-        result.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }
-
-    toggles.forEach((toggle) => {
-      toggle.addEventListener("click", () => {
-        selectedLane = toggle.dataset.lane;
-        toggles.forEach((item) => item.classList.remove("is-active"));
-        toggle.classList.add("is-active");
-        calculateRecommendation(false, false);
-      });
-    });
-
-    location.addEventListener("input", () => {
-      calculateRecommendation(false, false);
-      window.clearTimeout(autocompleteTimer);
-      autocompleteTimer = window.setTimeout(fetchLocationSuggestions, 220);
-    });
-
-    location.addEventListener("keydown", (event) => {
-      if (!currentSuggestions.length) return;
-
-      if (event.key === "ArrowDown") {
-        event.preventDefault();
-        highlightedSuggestion = Math.min(highlightedSuggestion + 1, currentSuggestions.length - 1);
-        updateHighlightedSuggestion();
-      }
-
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        highlightedSuggestion = Math.max(highlightedSuggestion - 1, 0);
-        updateHighlightedSuggestion();
-      }
-
-      if (event.key === "Enter" && highlightedSuggestion >= 0) {
-        event.preventDefault();
-        selectSuggestion(highlightedSuggestion);
-      }
-
-      if (event.key === "Escape") {
-        hideSuggestions();
-      }
-    });
-
-    location.addEventListener("blur", () => {
-      window.setTimeout(hideSuggestions, 140);
-    });
-
-    airport.addEventListener("change", () => {
-      hideSuggestions();
-      calculateRecommendation(false, false);
-      if (location.value.trim().length >= 2) {
-        fetchLocationSuggestions();
-      }
-    });
-
-    flightTime.addEventListener("change", () => calculateRecommendation(false, false));
-    calculate.addEventListener("click", () => calculateRecommendation(true, true));
-
-    const defaultDeparture = new Date(Date.now() + 2 * 60 * 60 * 1000);
-    flightTime.value = formatTimeInput(defaultDeparture);
-    calculateRecommendation(false, false);
-  })();
-</script>
 
   <!-- SkySpot Stress Line Chat Widget -->
 <style>
