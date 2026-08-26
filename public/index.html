@@ -95,6 +95,38 @@
 
     .nav-links a:hover{ color:var(--text); }
 
+    .nav-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .social-icon{
+      width:42px;
+      height:42px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      color:var(--text);
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      text-decoration:none;
+      transition:transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+
+    .social-icon:hover{
+      transform:translateY(-2px);
+      background:rgba(56,184,196,.12);
+      border-color:rgba(56,184,196,.34);
+    }
+
+    .social-icon svg{
+      width:19px;
+      height:19px;
+      display:block;
+    }
+
     .nav-cta,
     .btn-primary{
       display:inline-flex;
@@ -776,6 +808,9 @@
     .final-cta p{ max-width:600px; margin:18px auto 0; color:var(--muted); font-size:19px; line-height:1.5; }
 
     .footer{ padding:30px 0 44px; background:var(--deep); color:rgba(245,248,255,.54); text-align:center; border-top:1px solid var(--line); }
+    .footer-inner{ display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; }
+    .footer .social-icon{ width:36px; height:36px; color:rgba(245,248,255,.76); }
+    .footer .social-icon svg{ width:17px; height:17px; }
 
     .reveal{ opacity:0; transform:translateY(20px); transition:opacity .7s ease, transform .7s ease; }
     .reveal.is-visible{ opacity:1; transform:translateY(0); }
@@ -837,7 +872,9 @@
     @media (max-width:640px){
       .announce{ font-size:10px; line-height:1.5; }
       .nav-inner{ height:64px; }
+      .nav-actions{ gap:8px; }
       .nav-cta{ display:none; }
+      .social-icon{ width:38px; height:38px; }
       .hero-inner,.section-inner{ width:min(100% - 28px, 1160px); }
       .hero-copy-block{ text-align:center; }
       .hero-copy{ margin-left:auto; margin-right:auto; }
@@ -881,7 +918,14 @@
         <a href="#airports">Airports</a>
         <a href="#internship">Internship</a>
       </div>
-      <a class="nav-cta" href="https://testflight.apple.com/join/kj3hCPzn">Join Beta</a>
+      <div class="nav-actions">
+        <a class="social-icon" href="https://www.instagram.com/skyspotapp?igsi=MXU1enQxcHN5YzJ0aw%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Follow SkySpot on Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M7.8 2h8.4A5.81 5.81 0 0 1 22 7.8v8.4a5.81 5.81 0 0 1-5.8 5.8H7.8A5.81 5.81 0 0 1 2 16.2V7.8A5.81 5.81 0 0 1 7.8 2Zm0 2A3.81 3.81 0 0 0 4 7.8v8.4A3.81 3.81 0 0 0 7.8 20h8.4a3.81 3.81 0 0 0 3.8-3.8V7.8A3.81 3.81 0 0 0 16.2 4H7.8Zm8.68 2.38a1.14 1.14 0 1 1 0 2.28 1.14 1.14 0 0 1 0-2.28ZM12 7.15A4.85 4.85 0 1 1 12 16.85 4.85 4.85 0 0 1 12 7.15Zm0 2A2.85 2.85 0 1 0 12 14.85 2.85 2.85 0 0 0 12 9.15Z"></path>
+          </svg>
+        </a>
+        <a class="nav-cta" href="https://testflight.apple.com/join/kj3hCPzn">Join Beta</a>
+      </div>
       <button class="mobile-menu" id="navToggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
     </div>
   </nav>
@@ -1145,7 +1189,14 @@
   </main>
 
   <footer class="footer">
-    <div class="section-inner">SkySpot | Atlanta, GA | AI-powered arrival intelligence</div>
+    <div class="section-inner footer-inner">
+      <span>SkySpot | Atlanta, GA | AI-powered arrival intelligence</span>
+      <a class="social-icon" href="https://www.instagram.com/skyspotapp?igsi=MXU1enQxcHN5YzJ0aw%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Follow SkySpot on Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M7.8 2h8.4A5.81 5.81 0 0 1 22 7.8v8.4a5.81 5.81 0 0 1-5.8 5.8H7.8A5.81 5.81 0 0 1 2 16.2V7.8A5.81 5.81 0 0 1 7.8 2Zm0 2A3.81 3.81 0 0 0 4 7.8v8.4A3.81 3.81 0 0 0 7.8 20h8.4a3.81 3.81 0 0 0 3.8-3.8V7.8A3.81 3.81 0 0 0 16.2 4H7.8Zm8.68 2.38a1.14 1.14 0 1 1 0 2.28 1.14 1.14 0 0 1 0-2.28ZM12 7.15A4.85 4.85 0 1 1 12 16.85 4.85 4.85 0 0 1 12 7.15Zm0 2A2.85 2.85 0 1 0 12 14.85 2.85 2.85 0 0 0 12 9.15Z"></path>
+        </svg>
+      </a>
+    </div>
   </footer>
 
   <button class="ss-chat-launch" id="ssChatLaunch">Ask SkySpot</button>
